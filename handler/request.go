@@ -16,14 +16,14 @@ type CreateOpeningRequest struct {
 }
 
 func (r *CreateOpeningRequest) Validate() error {
-	//validation body bad request
-	// if r.Role == "" &&
-	// 	r.Company == "" &&
-	// 	r.Link == "" &&
-	// 	r.Location == "" &&
-	// 	r.Remote == nil && r.Salary <= 0 {
-	// 	return fmt.Errorf("request body is empty of malformed")
-	// }
+	// validation body bad request
+	if r.Role == "" &&
+		r.Company == "" &&
+		r.Link == "" &&
+		r.Location == "" &&
+		r.Remote == nil && r.Salary <= 0 {
+		return fmt.Errorf("request body is empty of malformed")
+	}
 
 	if r.Role == "" {
 		return errParamIsRequired("role", "string")
