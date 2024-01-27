@@ -2,13 +2,14 @@ package config
 
 import (
 	"os"
+
 	"github.com/Winnicius-Moura/go-studies.git/schemas"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/crypto/bcrypt"
 )
-
-import _ "github.com/mattn/go-sqlite3"
-
 
 func InitializeSQlite() (*gorm.DB, error) {
 	logger := GetLogger("sqlite")
@@ -38,10 +39,36 @@ func InitializeSQlite() (*gorm.DB, error) {
 	}
 
 	//Migrate Schema
-	err = db.AutoMigrate(&schemas.Opening{})
+	err = db.AutoMigrate(&schemas.Opening{}, &schemas.User{})
 	if err != nil {
 		logger.Errorf("sqlite automigration error: %v", err)
 		return nil, err
+	}
+
+	// Check if the root user exists
+	var rootUser schemas.User
+	result := db.First(&rootUser, "username = ?", "root")
+
+	if result.RowsAffected == 0 {
+		// Root user not found, create it
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("mudar123"), bcrypt.DefaultCost)
+		if err != nil {
+			logger.Errorf("error hashing password: %v", err)
+			return nil, err
+		}
+
+		rootUser = schemas.User{
+			Username: "root",
+			Password: string(hashedPassword),
+		}
+
+		err = db.Create(&rootUser).Error
+		if err != nil {
+			logger.Errorf("error creating root user: %v", err)
+			return nil, err
+		}
+
+		logger.Info("root user created successfully")
 	}
 
 	return db, nil
