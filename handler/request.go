@@ -67,3 +67,23 @@ func (r *UpdateOpeningRequest) Validate() error {
 }
 
 
+// Login
+type LoginRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+func (r *LoginRequest) Validate() error {
+	if r.Username == "" && r.Password == "" {
+		return fmt.Errorf("request body is empty of malformed")
+	}
+	if r.Username == "" {
+		return errParamIsRequired("username", "string")
+	}
+	if r.Password == "" {
+		return errParamIsRequired("password", "string")
+	}
+
+	return nil
+}
+
