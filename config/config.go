@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -34,9 +36,11 @@ func GetLogger(prefix string) *Logger {
 
 func SetupCors(router *gin.Engine) {
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://192.168.0.8:5173/", "http://localhost:5173/"}
+	config.AllowOrigins = []string{"http://192.168.0.8:5173", "http://localhost:5173"}
 	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowCredentials = true
+	config.MaxAge = 12 * time.Hour
 
 	router.Use(cors.New(config))
 }

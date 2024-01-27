@@ -14,6 +14,8 @@ import (
 func InitializeSQlite() (*gorm.DB, error) {
 	logger := GetLogger("sqlite")
 	dbPath := "./db/main.db"
+	rootUsername := os.Getenv("DB_USERNAME")
+	rootPassword := os.Getenv("DB_PASSWORD")
 
 	//Check if the databases file exists
 	_, err := os.Stat(dbPath) //_ just capture the error
@@ -47,18 +49,18 @@ func InitializeSQlite() (*gorm.DB, error) {
 
 	// Check if the root user exists
 	var rootUser schemas.User
-	result := db.First(&rootUser, "username = ?", "root")
+	result := db.First(&rootUser, "username = ?", rootUsername)
 
 	if result.RowsAffected == 0 {
 		// Root user not found, create it
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("mudar123"), bcrypt.DefaultCost)
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(rootPassword), bcrypt.DefaultCost)
 		if err != nil {
 			logger.Errorf("error hashing password: %v", err)
 			return nil, err
 		}
 
 		rootUser = schemas.User{
-			Username: "root",
+			Username: rootUsername,
 			Password: string(hashedPassword),
 		}
 
@@ -68,7 +70,7 @@ func InitializeSQlite() (*gorm.DB, error) {
 			return nil, err
 		}
 
-		logger.Info("root user created successfully")
+		logger.Infof("root user created successfully: %v", rootUsername)
 	}
 
 	return db, nil
