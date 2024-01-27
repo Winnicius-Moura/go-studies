@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Winnicius-Moura/go-studies.git/config"
@@ -12,16 +13,16 @@ import (
 )
 
 func GenerateJWTToken(username string) (string, error) {
-	// Never changes this value.
-	secretKey := []byte("&lz2(2oba+512yxkg1g5+)5q=d1^h+j&0upg0#y(!z7*s68oy&")
+	jwtSecret := os.Getenv("JWT_SECRET")
+	secretKey := []byte(jwtSecret)
 
-	// Configuração do token JWT
+	// Configuration JWT token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(), // Token expira em 24 horas
 	})
 
-	// Assina o token com a chave secreta
+	// Sign the secret key into tokenString
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		logger.Errorf("error signing JWT token: %v", err.Error())
@@ -41,7 +42,7 @@ func LoginHandler(ctx *gin.Context) {
 		sendError(ctx, http.StatusBadRequest, err.Error())
 	}
 
-	//checks if there is a user in db
+	// Checks if there is a user in db
 	user := schemas.User{
 		Username: request.Username,
 		Password: request.Password,

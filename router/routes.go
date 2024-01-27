@@ -9,6 +9,8 @@ func initializeRoutes(router *gin.Engine) {
 	handler.InitializeHandler()
 	v1 := router.Group("/api/v1")
 
+	v1.Use(handler.AuthMiddleware)
+
 	{
 		v1.GET("/opening", handler.ShowOpeningHandler)
 		v1.GET("/openings", handler.ListOpeningsHandler)
