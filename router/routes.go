@@ -15,5 +15,10 @@ func initializeRoutes(router *gin.Engine) {
 		v1.POST("/opening", handler.CreateOpeningHandler)
 		v1.PUT("/opening", handler.UpdateOpeningHandler)
 		v1.DELETE("/opening", handler.DeleteOpeningHandler)
+
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/login", handler.LoginHandler)
+		}
 	}
 }
