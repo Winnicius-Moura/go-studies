@@ -1,12 +1,14 @@
 package handler
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func errParamIsRequired(name, typ string) error {
 	return fmt.Errorf("param: %s (type: %s) is required", name, typ)
 }
 
-//CreateOpening
+// CreateOpening
 type CreateOpeningRequest struct {
 	Role     string `json:"role"`
 	Company  string `json:"company"`
@@ -66,7 +68,6 @@ func (r *UpdateOpeningRequest) Validate() error {
 	return fmt.Errorf("at least one valid field must be provided")
 }
 
-
 // Login
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
@@ -87,3 +88,27 @@ func (r *LoginRequest) Validate() error {
 	return nil
 }
 
+// Register
+type UserRegister struct {
+	Email    string `json:"email" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+func (r *UserRegister) Validate() error {
+	if r.Username == "" && r.Password == "" && r.Email == "" {
+		return fmt.Errorf("request body is empty of malformed")
+	}
+
+	if r.Email == "" {
+		return errParamIsRequired("email", "string")
+	}
+	if r.Username == "" {
+		return errParamIsRequired("username", "string")
+	}
+	if r.Password == "" {
+		return errParamIsRequired("password", "string")
+	}
+
+	return nil
+}

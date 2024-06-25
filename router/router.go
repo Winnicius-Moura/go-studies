@@ -12,5 +12,5 @@ func Initialize() {
 
 	initializeRoutes(r)
 
-	r.Run(":8080")
+	r.Run(":3000")
 }

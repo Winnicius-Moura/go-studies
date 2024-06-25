@@ -9,11 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var publicRoutes = []string{
+	"/api/v1/auth/login",
+	"/api/v1/auth/register",
+}
+
 func AuthMiddleware(ctx *gin.Context) {
 	path := ctx.Request.URL.Path
-	if path == "/api/v1/auth/login" {
-		ctx.Next()
-		return
+
+	for _, route:= range publicRoutes {
+		if path == route {
+			ctx.Next()
+			return
+		}
 	}
 
 	authToken := ctx.GetHeader("Authorization")
