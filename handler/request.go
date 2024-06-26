@@ -93,10 +93,11 @@ type UserRegisterRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	Profile  string `json:"profile" binding:"required"`
 }
 
 func (r *UserRegisterRequest) Validate() error {
-	if r.Username == "" && r.Password == "" && r.Email == "" {
+	if r.Username == "" && r.Password == "" && r.Email == "" && r.Profile == "" {
 		return fmt.Errorf("request body is empty of malformed")
 	}
 
@@ -108,6 +109,10 @@ func (r *UserRegisterRequest) Validate() error {
 	}
 	if r.Password == "" {
 		return errParamIsRequired("password", "string")
+	}
+
+	if r.Profile == "" {
+		return errParamIsRequired("profile", "string")
 	}
 
 	return nil

@@ -7,6 +7,7 @@ type User struct {
 	Email    string `gorm:"unique"`
 	Username string `gorm:"unique"`
 	Password string
+	Profile  string `gorm:"type:varchar(20);not null"`
 }
 
 type UserResponse struct {
@@ -15,5 +16,6 @@ type UserResponse struct {
 	UpdatedAt string `json:"updatedAt"`
 	Email     string `json:"email"`
 	Username  string `json:"username"`
+	Profile   string `json:"profile"`
 	Token     string `json:"token"`
 }

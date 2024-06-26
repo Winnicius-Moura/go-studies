@@ -39,6 +39,7 @@ func RegisterHandler(ctx *gin.Context) {
 	newUser := schemas.User{
 		Email:    request.Email,
 		Username: request.Username,
+		Profile:  request.Profile,
 		Password: string(hashedPassword),
 	}
 
@@ -52,5 +53,6 @@ func RegisterHandler(ctx *gin.Context) {
 	sendSuccess(ctx, "create-user", gin.H{
 		"email":    request.Email,
 		"username": request.Username,
+		"profile":  request.Profile,
 	})
 }

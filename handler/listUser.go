@@ -23,6 +23,7 @@ func ListUsersHandler(ctx *gin.Context) {
 			UpdatedAt: user.UpdatedAt.String(),
 			Email:     user.Email,
 			Username:  user.Username,
+			Profile:   user.Profile,
 		}
 	}
 	sendSuccess(ctx, "list-users", userResponses)

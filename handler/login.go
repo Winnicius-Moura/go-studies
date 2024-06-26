@@ -12,13 +12,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GenerateJWTToken(username string) (string, error) {
+func GenerateJWTToken(username string, profile string) (string, error) {
 	jwtSecret := os.Getenv("JWT_SECRET")
 	secretKey := []byte(jwtSecret)
 
 	// Configuration JWT token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
+		"profile":  profile,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(), // Token expira em 24 horas
 	})
 
@@ -61,7 +62,7 @@ func LoginHandler(ctx *gin.Context) {
 		return
 	}
 
-	token, err := GenerateJWTToken(request.Username)
+	token, err := GenerateJWTToken(request.Username, user.Profile)
 	if err != nil {
 		sendError(ctx, http.StatusInternalServerError, "error generatin JWT token")
 		return
@@ -69,7 +70,9 @@ func LoginHandler(ctx *gin.Context) {
 
 	sendSuccess(ctx, "login", gin.H{
 		"token":    token,
-		"userId":   user.ID,
+		"id":       user.ID,
+		"email":    user.Email,
 		"username": user.Username,
+		"profile":  user.Profile,
 	})
 }
