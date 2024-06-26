@@ -10,17 +10,14 @@ import (
 )
 
 func RegisterHandler(ctx *gin.Context) {
-	request := UserRegister{}
+	request := UserRegisterRequest{}
 
-	if err := ctx.BindJSON(&request); err != nil {
-		logger.Errorf("validation login error: %v", err.Error())
-		sendError(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
+	ctx.BindJSON(&request)
 
 	if err := request.Validate(); err != nil {
 		logger.Errorf("validation login error: %v", err.Error())
 		sendError(ctx, http.StatusBadRequest, err.Error())
+		return
 	}
 
 	// Checks if there is an existing user in db

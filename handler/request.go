@@ -89,13 +89,13 @@ func (r *LoginRequest) Validate() error {
 }
 
 // Register
-type UserRegister struct {
+type UserRegisterRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-func (r *UserRegister) Validate() error {
+func (r *UserRegisterRequest) Validate() error {
 	if r.Username == "" && r.Password == "" && r.Email == "" {
 		return fmt.Errorf("request body is empty of malformed")
 	}
@@ -111,4 +111,18 @@ func (r *UserRegister) Validate() error {
 	}
 
 	return nil
+}
+
+// Edit
+type UpdateUserRequest struct {
+	Email    string `json:"email" binding:"omitempty,email"`
+	Username string `json:"username" binding:"omitempty"`
+	Password string `json:"password" binding:"omitempty"`
+}
+
+func (r *UpdateUserRequest) Validate() error {
+	if r.Email != "" || r.Password != "" || r.Username != "" {
+		return nil
+	}
+	return fmt.Errorf("at least one valid field must be provided")
 }
