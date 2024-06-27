@@ -39,6 +39,10 @@ func UpdateUserHandler(ctx *gin.Context) {
 		user.Username = request.Username
 	}
 
+	if request.Profile != ""  {
+		user.Profile = request.Profile
+	}
+
 	if request.Password != "" {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 		if err != nil {

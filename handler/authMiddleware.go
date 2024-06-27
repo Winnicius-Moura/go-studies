@@ -17,7 +17,7 @@ var publicRoutes = []string{
 func AuthMiddleware(ctx *gin.Context) {
 	path := ctx.Request.URL.Path
 
-	for _, route:= range publicRoutes {
+	for _, route := range publicRoutes {
 		if path == route {
 			ctx.Next()
 			return
@@ -55,6 +55,15 @@ func AuthMiddleware(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		sendError(ctx, http.StatusUnauthorized, "Invalid token claims")
+		ctx.Abort()
+		return
+	}
+
+	ctx.Set("user", claims)
 
 	ctx.Next()
 

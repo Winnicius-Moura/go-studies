@@ -123,10 +123,11 @@ type UpdateUserRequest struct {
 	Email    string `json:"email" binding:"omitempty,email"`
 	Username string `json:"username" binding:"omitempty"`
 	Password string `json:"password" binding:"omitempty"`
+	Profile  string `json:"profile" binding:"omitempty"`
 }
 
 func (r *UpdateUserRequest) Validate() error {
-	if r.Email != "" || r.Password != "" || r.Username != "" {
+	if r.Email != "" || r.Password != "" || r.Username != "" || r.Profile != "" {
 		return nil
 	}
 	return fmt.Errorf("at least one valid field must be provided")
