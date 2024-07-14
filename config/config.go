@@ -36,7 +36,7 @@ func GetLogger(prefix string) *Logger {
 
 func SetupCors(router *gin.Engine) {
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://192.168.0.8:5173", "http://localhost:5173"}
+	config.AllowOrigins = []string{"http://192.168.0.8:5173", "http://localhost:5173", "http://localhost:4173", "http://192.168.0.23:4173", "http://192.168.56.1:4173"}
 	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowCredentials = true

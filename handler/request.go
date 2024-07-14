@@ -127,6 +127,7 @@ type UpdateUserRequest struct {
 }
 
 func (r *UpdateUserRequest) Validate() error {
+	//validar campo profile para ser igual as opções pre definidas
 	if r.Email != "" || r.Password != "" || r.Username != "" || r.Profile != "" {
 		return nil
 	}
